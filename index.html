@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14110f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Paris Summit · Program</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+:root{
+  --bg:#14110f; --card:#1f1b18; --card2:#29231f; --line:#3a322c;
+  --ink:#f4ede4; --mute:#a99d90; --red:#e2412f; --gold:#e8b44a; --green:#5cbf8a;
+  --main:#e2412f; --cardin:#e8b44a; --cine:#7aa7e8; --hall:#c58be0; --eve:#5cbf8a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+header{position:sticky;top:0;z-index:5;background:rgba(20,17,15,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:calc(env(safe-area-inset-top) + 12px) 16px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brand h1{margin:0;font-size:19px;line-height:1.15;letter-spacing:-.01em}
+.brand h1 span{color:var(--red)}
+.brand p{margin:3px 0 0;color:var(--mute);font-size:13px}
+.clock{font-variant-numeric:tabular-nums;font-size:13px;color:var(--mute);text-align:right;white-space:nowrap}
+.clock b{display:block;color:var(--ink);font-size:17px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 13px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.chip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+main{padding:12px 16px calc(96px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto}
+.now{background:linear-gradient(135deg,#3b1712,#1f1b18);border:1px solid #5a2a20;border-radius:16px;padding:14px;margin-bottom:16px}
+.now h2{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--red)}
+.now .row{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:14px}
+.now .row b{font-variant-numeric:tabular-nums;color:var(--mute);font-weight:500;flex:none;width:44px}
+.now .empty{color:var(--mute);font-size:14px}
+.hour{position:sticky;top:var(--hdr,120px);z-index:2;background:var(--bg);padding:10px 0 6px;font-size:13px;font-weight:700;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.item{position:relative;display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 12px 14px;margin-bottom:10px;overflow:hidden}
+.item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.item.live{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+.item.past{opacity:.45}
+.item .body{flex:1;min-width:0}
+.time{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c)}
+.badge{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--red);color:#fff}
+.badge.warn{background:#5a4416;color:var(--gold)}
+.title{font-size:16px;font-weight:650;margin:3px 0 2px;line-height:1.3}
+.title em{font-style:italic;font-weight:600}
+.sub{font-size:14px;color:var(--mute)}
+.more{display:none;margin-top:8px;font-size:14px;line-height:1.5}
+.item.open .more{display:block}
+.more dt{color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
+.more dd{margin:1px 0 0}
+.star{flex:none;width:44px;height:44px;margin:-6px -6px 0 0;border-radius:50%;display:grid;place-items:center;font-size:24px;color:var(--line)}
+.star[aria-pressed=true]{color:var(--gold)}
+.star:active{transform:scale(.88)}
+.empty-state{text-align:center;color:var(--mute);padding:48px 16px}
+.empty-state b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:rgba(20,17,15,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabbar button{flex:1;padding:9px 0 8px;font-size:11px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabbar button svg{width:24px;height:24px}
+nav.tabbar button[aria-selected=true]{color:var(--ink)}
+nav.tabbar button[aria-selected=true] svg{color:var(--red)}
+.count{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;line-height:18px;margin-left:3px}
+.info h2{font-size:20px;margin:8px 0 4px}
+.info p,.info li{color:var(--mute);font-size:15px}
+.info a{color:var(--ink)}
+.info .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.info .card h3{margin:0 0 6px;font-size:15px}
+.legend{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.legend li{display:flex;gap:10px;align-items:center}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;margin:4px 6px 0 0}
+.btn.ghost{background:var(--card2);color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;transition:.25s;pointer-events:none;z-index:9;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <div class="brand">
+    <div>
+      <h1>Paris Summit <span>Against</span> International Oligarchy</h1>
+      <p>Lör 21 nov 2026 · Théâtre de la Concorde</p>
+    </div>
+    <div class="clock" aria-live="polite"><b id="clk">--:--</b>Paristid</div>
+  </div>
+  <div class="chips" id="chips" role="toolbar" aria-label="Filtrera på scen"></div>
+</header>
+
+<main id="main"></main>
+
+<nav class="tabbar" role="tablist">
+  <button role="tab" data-view="program" aria-selected="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Program
+  </button>
+  <button role="tab" data-view="mine" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span>Mitt schema<span id="cnt"></span></span>
+  </button>
+  <button role="tab" data-view="info" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>Info
+  </button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const STAGES = {
+  main:  {name:"Huvudscen",     short:"Huvudscen", color:"var(--main)",  place:"Stora salongen, Théâtre de la Concorde"},
+  cardin:{name:"Cardin-scenen", short:"Cardin",    color:"var(--cardin)",place:"Cardin Stage, Théâtre de la Concorde"},
+  cine:  {name:"Ciné-Club",     short:"Ciné-Club", color:"var(--cine)",  place:"Ciné-Club (på franska)"},
+  hall:  {name:"Boksignering",  short:"Signering", color:"var(--hall)",  place:"Hallen"},
+  eve:   {name:"Kvällsevent",   short:"Kväll",     color:"var(--eve)",   place:"Stora teatern"}
+};
+// [id, stage, start, end, title(html), subtitle, details{label:value}]
+const RAW = [
+ ["m1","main","11:30","13:00","AI: Universal Ownership of Knowledge","Carte blanche: Esther Duflo",
+  {"Fokus":"Vem ska äga och styra AI som byggts på vår gemensamma, kollektiva kunskap?","Carte blanche":"Esther Duflo","Talare":"Christy Hoffman, Isabelle Ferreras, Cecilia Rikap"}],
+ ["m2","main","14:00","15:30","Media: Freeing Public Debate from Billionaire Control","Carte blanche: Paul Krugman",
+  {"Fokus":"Hur koncentrerat medieägande styr allmänhetens uppmärksamhet och debatt – och vilka reformer som kan återställa mångfalden.","Carte blanche":"Paul Krugman","Talare":"Naomi Klein, Pierre Rosanvallon, Mónica Martínez-Bravo, Lea Ypi"}],
+ ["m3","main","16:30","18:00","Tax: Fighting the Secession of the Ultra-Rich","Carte blanche: Joseph E. Stiglitz",
+  {"Fokus":"Hur progressiv beskattning kan återinföras i toppen av förmögenhetsskalan.","Carte blanche":"Joseph E. Stiglitz","Talare":"Gabriel Zucman, Jayati Ghosh, Dave Regan, Thomas Piketty"}],
+
+ ["c1","cardin","11:45","12:20","Anti-Fascist Economics","Samtal med Isabella Weber",{"Format":"Rundabordssamtal","Medverkande":"Isabella Weber"}],
+ ["c2","cardin","12:50","13:30","Fighting Oligarchy in the US","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+ ["c3","cardin","14:00","14:40","Philanthropy, Taxation and the Public Good","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+ ["c4","cardin","15:10","16:05","Why the Rich Should Pay More, by the Rich","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+ ["c5","cardin","16:35","17:15","Media: Reclaiming Information from Oligarchic Power","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+ ["c6","cardin","17:45","18:25","Breaking Secrecy: Investigative Journalism and Tax","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+
+ ["f1","cine","11:45","13:05","<em>Tax Wars</em>","Debatt med Eva Joly",{"Format":"Visning + debatt (franska)","Debatt":"Eva Joly","Moderator":"Sébastien Laffitte"}],
+ ["f2","cine","13:35","14:45","<em>Data Center Drought</em>","Debatt med Camille Étienne & Lou Welgryn",{"Format":"Visning + debatt (franska)","Debatt":"Camille Étienne, Lou Welgryn","Moderator":"Alexandre Poidatz"}],
+ ["f3","cine","15:15","16:35","<em>Tax Me (If You Can!)</em>","Debatt med Thomas Lafarge & Guillaume Rambourg",{"Format":"Visning + debatt (franska)","Debatt":"Thomas Lafarge, Guillaume Rambourg","Moderator":"Rémi Lei"}],
+ ["f4","cine","17:05","18:05","Tech Oligarchs at the Polls: Lessons from Brazil","Samtal med Patricia Campos Mello",{"Format":"Fireside chat (franska)","Medverkande":"Patricia Campos Mello","Moderator":"Giancarlo Summa"}],
+
+ ["b1","hall","11:30","12:30","<em>Against International Oligarchy, the Paris Manifesto</em>","Gabriel Zucman",{"Författare":"Gabriel Zucman"}],
+ ["b2","hall","11:30","12:00","<em>Economix: L'histoire du capitalisme français</em>","Christian Chavagneux",{"Författare":"Christian Chavagneux"}],
+ ["b3","hall","12:15","13:00","<em>La Tyrannie du présent</em>","Pierre Rosanvallon",{"Författare":"Pierre Rosanvallon"}],
+ ["b4","hall","12:45","13:30","<em>Anti-Fascist Economics: In Defense of Affordability, Dignity, and Democracy</em>","Isabella Weber",{"Författare":"Isabella Weber"}],
+ ["b5","hall","13:15","14:00","<em>Good Economics for Hard Times</em>","Esther Duflo",{"Författare":"Esther Duflo"}],
+ ["b6","hall","13:45","14:30","<em>The Trading Game</em>","Gary Stevenson",{"Författare":"Gary Stevenson"}],
+ ["b7","hall","14:15","15:00","<em>Democratizing the Corporation: The Bicameral Firm and Beyond</em>","Isabelle Ferreras",{"Författare":"Isabelle Ferreras"}],
+ ["b8","hall","14:45","15:30","<em>The Rulers: Corporate Power in the Age of AI and the Cloud</em>","Cecilia Rikap",{"Författare":"Cecilia Rikap"}],
+ ["b9","hall","15:15","16:00","<em>The Road to Freedom: Economics and the Good Society</em>","Joseph E. Stiglitz",{"Författare":"Joseph E. Stiglitz"}],
+ ["b10","hall","15:45","16:30","<em>Justice mondiale</em>","Thomas Piketty & Lucas Chancel",{"Författare":"Thomas Piketty, Lucas Chancel"}],
+ ["b11","hall","16:15","17:00","<em>End Times Fascism and the Fight for the Living World</em>","Naomi Klein",{"Författare":"Naomi Klein"}],
+ ["b12","hall","16:45","17:30","<em>Facteur X</em>","Camille Étienne",{"Författare":"Camille Étienne"}],
+ ["b13","hall","17:15","18:00","<em>Tout est à nous!</em>","Sophie Binet",{"Författare":"Sophie Binet"}],
+
+ ["e1","eve","19:00","23:00","A Call to Action","Endast för inbjudna · tid ej angiven",{"Format":"Uppmaning till handling med Nobelpristagare, politiska ledare, ministrar och aktivister.","Obs":"Exakta tider och talare anges inte i programmet. Dörrarna stänger kl. 23:00."}]
+];
+const toMin = t => {const [h,m]=t.split(":").map(Number);return h*60+m};
+const ITEMS = RAW.map(([id,stage,start,end,title,sub,details])=>({id,stage,start,end,s:toMin(start),e:toMin(end),title,sub,details}))
+  .sort((a,b)=>a.s-b.s||a.e-b.e);
+
+// --- state ---
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+};
+let picks = new Set(store.get("pso-picks",[]));
+let view = "program", filter = "all";
+const openIds = new Set();
+
+// Paris time on event day (CET, UTC+1). Returns minutes since midnight, or null if not the event day.
+function parisNow(){
+  const p = new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const g = t => p.find(x=>x.type===t).value;
+  return {date:`${g("year")}-${g("month")}-${g("day")}`, min:(+g("hour"))*60+(+g("minute")), hm:`${g("hour")}:${g("minute")}`};
+}
+const EVENT_DATE = "2026-11-21";
+function status(it){
+  const n = parisNow();
+  if (n.date < EVENT_DATE) return "future";
+  if (n.date > EVENT_DATE) return "past";
+  if (n.min >= it.e) return "past";
+  if (n.min >= it.s) return "live";
+  return "future";
+}
+function conflicts(it){
+  return ITEMS.filter(o=>o.id!==it.id && picks.has(o.id) && o.s<it.e && it.s<o.e);
+}
+const plain = h => h.replace(/<[^>]+>/g,"");
+
+// --- render ---
+const $ = s=>document.querySelector(s);
+function renderChips(){
+  const opts = [["all","Allt",null],...Object.entries(STAGES).map(([k,v])=>[k,v.short,v.color])];
+  $("#chips").innerHTML = opts.map(([k,l,c])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${c?`<i style="background:${c}"></i>`:""}${l}</button>`).join("");
+  $("#chips").style.display = view==="info" ? "none" : "flex";
+}
+function card(it){
+  const st = STAGES[it.stage], on = picks.has(it.id), s = status(it);
+  const clash = on ? conflicts(it) : [];
+  const det = Object.entries(it.details).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("") + `<dt>Plats</dt><dd>${st.place}</dd>`;
+  return `<article class="item ${s==="live"?"live":""} ${s==="past"?"past":""} ${openIds.has(it.id)?"open":""}" style="--c:${st.color}" data-id="${it.id}">
+    <div class="body" data-toggle>
+      <div class="time">${it.stage==="eve"?"Kväll – 23:00":it.start+"–"+it.end}<span class="tag">${st.short}</span>${s==="live"?'<span class="badge">PÅGÅR</span>':""}${clash.length?`<span class="badge warn" title="Krockar med: ${clash.map(c=>plain(c.title)).join(", ")}">Krock</span>`:""}</div>
+      <div class="title">${it.title}</div>
+      <div class="sub">${it.sub}</div>
+      <dl class="more">${det}${clash.length?`<dt>Krockar med</dt><dd>${clash.map(c=>`${c.start} ${plain(c.title)}`).join("<br>")}</dd>`:""}</dl>
+    </div>
+    <button class="star" aria-pressed="${on}" aria-label="${on?"Ta bort från":"Lägg till i"} mitt schema" data-star="${it.id}">${on?"★":"☆"}</button>
+  </article>`;
+}
+function grouped(list){
+  let out="", hour=-1;
+  for (const it of list){
+    const h = Math.floor(it.s/60);
+    if (h!==hour){hour=h; out+=`<div class="hour">${String(h).padStart(2,"0")}:00</div>`}
+    out+=card(it);
+  }
+  return out;
+}
+function nowBox(list){
+  const n = parisNow();
+  if (n.date !== EVENT_DATE) {
+    if (n.date > EVENT_DATE) return "";
+    const days = Math.round((Date.parse(EVENT_DATE)-Date.parse(n.date))/864e5);
+    return `<section class="now"><h2>Nedräkning</h2><div class="empty">${days===1?"I morgon":`Om ${days} dagar`} – dörrarna öppnar 11:30.</div></section>`;
+  }
+  const live = list.filter(i=>status(i)==="live");
+  const next = list.filter(i=>i.s>n.min).slice(0,3);
+  const row = i=>`<div class="row"><b>${i.start}</b><span>${plain(i.title)} <span style="color:${STAGES[i.stage].color}">· ${STAGES[i.stage].short}</span></span></div>`;
+  return `<section class="now"><h2>Pågår nu</h2>${live.length?live.map(row).join(""):'<div class="empty">Inget just nu.</div>'}
+    ${next.length?`<h2 style="margin-top:12px">Härnäst</h2>${next.map(row).join("")}`:""}</section>`;
+}
+function render(){
+  document.querySelectorAll("nav.tabbar button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===view));
+  $("#cnt").innerHTML = picks.size?`<span class="count">${picks.size}</span>`:"";
+  renderChips();
+  const main = $("#main");
+  const byFilter = it => filter==="all" || it.stage===filter;
+  if (view==="program"){
+    const list = ITEMS.filter(byFilter);
+    main.innerHTML = nowBox(list) + grouped(list);
+  } else if (view==="mine"){
+    const list = ITEMS.filter(i=>picks.has(i.id)).filter(byFilter);
+    const nClash = new Set(ITEMS.filter(i=>picks.has(i.id) && conflicts(i).length).map(i=>i.id)).size;
+    main.innerHTML = list.length
+      ? nowBox(list) + (nClash?`<p class="sub" style="margin:0 0 8px">⚠︎ ${nClash} punkter överlappar i tid – tryck på ett kort för detaljer.</p>`:"") + grouped(list)
+        + `<div style="margin-top:16px"><button class="btn" id="ics">Lägg till i kalendern</button><button class="btn ghost" id="share">Dela mitt schema</button></div>`
+      : `<div class="empty-state"><b>Inga valda programpunkter än</b>Tryck på ☆ vid en programpunkt för att lägga den i ditt schema.</div>`;
+  } else {
+    main.innerHTML = infoView();
+  }
+  document.documentElement.style.setProperty("--hdr", $("#hdr").offsetHeight+"px");
+}
+function infoView(){
+  return `<div class="info">
+    <h2>Om dagen</h2>
+    <p>Första Paris-toppmötet mot internationell oligarki. Lördag 21 november 2026, kl. 11:30–23:00 på Théâtre de la Concorde, Place de la Concorde, Paris.</p>
+    <div class="card"><h3>Scener</h3><ul class="legend">${Object.values(STAGES).map(s=>`<li><i style="background:${s.color}"></i><span><b>${s.name}</b><br><span class="sub">${s.place}</span></span></li>`).join("")}</ul></div>
+    <div class="card"><h3>Så funkar appen</h3>
+      <p>Tryck på ☆ för att följa en programpunkt – den hamnar under <b>Mitt schema</b> och sparas på din telefon. Tryck på ett kort för att se talare och detaljer. Under dagen markeras det som pågår, och appen varnar om dina val krockar.</p>
+      <p>Lägg till appen på hemskärmen via webbläsarens dela-meny för snabb åtkomst.</p></div>
+    <div class="card"><h3>Bra att veta</h3><p>Visningar och debatter i Ciné-Club hålls på franska. Kvällseventet i stora teatern är endast för inbjudna.</p>
+      <p>Källa: <a href="https://parisagainstoligarchy.world/program" target="_blank" rel="noopener">parisagainstoligarchy.world/program</a>. Kontrollera ändringar på den officiella sidan.</p></div>
+    ${picks.size?`<button class="btn ghost" id="clear">Rensa mitt schema</button>`:""}
+  </div>`;
+}
+
+// --- calendar export ---
+function ics(list){
+  const pad=n=>String(n).padStart(2,"0");
+  const dt=m=>`20261121T${pad(Math.floor(m/60))}${pad(m%60)}00`;
+  const esc=s=>s.replace(/[\\;,]/g,c=>"\\"+c).replace(/\n/g,"\\n");
+  const ev=list.map(it=>["BEGIN:VEVENT",`UID:${it.id}@paris-summit-program`,`DTSTAMP:20261118T000000Z`,
+    `DTSTART;TZID=Europe/Paris:${dt(it.s)}`,`DTEND;TZID=Europe/Paris:${dt(it.e)}`,
+    `SUMMARY:${esc(plain(it.title))}`,`LOCATION:${esc(STAGES[it.stage].place+", Place de la Concorde, Paris")}`,
+    `DESCRIPTION:${esc(Object.entries(it.details).map(([k,v])=>k+": "+v).join("\n"))}`,
+    "BEGIN:VALARM","TRIGGER:-PT10M","ACTION:DISPLAY","DESCRIPTION:Börjar om 10 min","END:VALARM","END:VEVENT"].join("\r\n"));
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Paris Summit Program//SV","CALSCALE:GREGORIAN",
+    "BEGIN:VTIMEZONE","TZID:Europe/Paris","BEGIN:STANDARD","DTSTART:19701025T030000","TZOFFSETFROM:+0200","TZOFFSETTO:+0100","RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU","END:STANDARD","END:VTIMEZONE",
+    ...ev,"END:VCALENDAR"].join("\r\n");
+}
+function download(){
+  const list = ITEMS.filter(i=>picks.has(i.id));
+  const blob = new Blob([ics(list)],{type:"text/calendar"});
+  const a = document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="paris-summit-mitt-schema.ics";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+async function share(){
+  const ids=[...picks].join(",");
+  const url = location.origin+location.pathname+"#s="+ids;
+  const text = "Mitt schema – Paris Summit 21/11:\n"+ITEMS.filter(i=>picks.has(i.id)).map(i=>`${i.start} ${plain(i.title)} (${STAGES[i.stage].short})`).join("\n");
+  try{ if(navigator.share){await navigator.share({title:"Mitt schema",text,url});return} }catch(e){return}
+  try{ await navigator.clipboard.writeText(text+"\n"+url); toast("Kopierat!") }catch{ toast("Kunde inte dela") }
+}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),1800)}
+
+// --- events ---
+document.addEventListener("click",e=>{
+  const star=e.target.closest("[data-star]");
+  if(star){const id=star.dataset.star; if(picks.has(id)){picks.delete(id);toast("Borttagen från ditt schema")}else{picks.add(id);const c=conflicts(ITEMS.find(i=>i.id===id));toast(c.length?"Tillagd – krockar med "+c.length:"Tillagd i ditt schema ★")}
+    store.set("pso-picks",[...picks]); render(); return}
+  const tg=e.target.closest("[data-toggle]");
+  if(tg){const id=tg.closest(".item").dataset.id; openIds.has(id)?openIds.delete(id):openIds.add(id); tg.closest(".item").classList.toggle("open"); return}
+  const chip=e.target.closest(".chip"); if(chip){filter=chip.dataset.f; render(); window.scrollTo({top:0}); return}
+  const tab=e.target.closest("nav.tabbar button"); if(tab){view=tab.dataset.view; render(); window.scrollTo({top:0}); return}
+  if(e.target.id==="ics") download();
+  if(e.target.id==="share") share();
+  if(e.target.id==="clear" && confirm("Rensa alla valda programpunkter?")){picks.clear();store.set("pso-picks",[]);render()}
+});
+// import shared schedule
+(function(){
+  const m=location.hash.match(/s=([\w,]+)/);
+  if(m){const ids=m[1].split(",").filter(id=>ITEMS.some(i=>i.id===id)); if(ids.length){ids.forEach(id=>picks.add(id)); store.set("pso-picks",[...picks]); view="mine"; history.replaceState(null,"",location.pathname); setTimeout(()=>toast(`${ids.length} punkter importerade`),300)}}
+})();
+function tick(){ $("#clk").textContent = parisNow().hm }
+tick(); render();
+setInterval(()=>{tick(); if(view!=="info") render()},30000);
+addEventListener("resize",()=>document.documentElement.style.setProperty("--hdr",$("#hdr").offsetHeight+"px"));
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
