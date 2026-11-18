@@ -75,9 +75,31 @@ nav.tabbar button[aria-selected=true] svg{color:var(--red)}
 .legend i{width:12px;height:12px;border-radius:3px;flex:none}
 .btn{display:inline-block;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;margin:4px 6px 0 0}
 .btn.ghost{background:var(--card2);color:var(--ink)}
+.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px;margin-top:4px}
+.search::placeholder{color:var(--mute)}
+.person{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 4px 14px;margin-bottom:10px}
+.person h3{margin:0 0 6px;font-size:17px}
+.srow{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;border-top:1px solid var(--line);padding:8px 0 6px;position:relative}
+.srow::before{content:"";position:absolute;left:-14px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--c)}
+.stitle{font-size:14px;margin-top:2px}
+.role{font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.links{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.info a .btn{margin-top:8px}
+.more a{color:var(--ink)}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;transition:.25s;pointer-events:none;z-index:9;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media (prefers-reduced-motion:reduce){.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px;margin-top:4px}
+.search::placeholder{color:var(--mute)}
+.person{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 4px 14px;margin-bottom:10px}
+.person h3{margin:0 0 6px;font-size:17px}
+.srow{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;border-top:1px solid var(--line);padding:8px 0 6px;position:relative}
+.srow::before{content:"";position:absolute;left:-14px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--c)}
+.stitle{font-size:14px;margin-top:2px}
+.role{font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.links{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.info a .btn{margin-top:8px}
+.more a{color:var(--ink)}
+.toast{transition:none}}
 </style>
 </head>
 <body>
@@ -98,6 +120,9 @@ nav.tabbar button[aria-selected=true] svg{color:var(--red)}
   <button role="tab" data-view="program" aria-selected="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Program
   </button>
+  <button role="tab" data-view="speakers" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.5.8 2.6 2.6 3 5.2"/></svg>Talare
+  </button>
   <button role="tab" data-view="mine" aria-selected="false">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span>Mitt schema<span id="cnt"></span></span>
   </button>
@@ -117,23 +142,23 @@ const STAGES = {
 };
 // [id, stage, start, end, title(html), subtitle, details{label:value}]
 const RAW = [
- ["m1","main","11:30","13:00","AI: Universal Ownership of Knowledge","Carte blanche: Esther Duflo",
-  {"Fokus":"Vem ska äga och styra AI som byggts på vår gemensamma, kollektiva kunskap?","Carte blanche":"Esther Duflo","Talare":"Christy Hoffman, Isabelle Ferreras, Cecilia Rikap"}],
- ["m2","main","14:00","15:30","Media: Freeing Public Debate from Billionaire Control","Carte blanche: Paul Krugman",
-  {"Fokus":"Hur koncentrerat medieägande styr allmänhetens uppmärksamhet och debatt – och vilka reformer som kan återställa mångfalden.","Carte blanche":"Paul Krugman","Talare":"Naomi Klein, Pierre Rosanvallon, Mónica Martínez-Bravo, Lea Ypi"}],
+ ["m1","main","11:30","13:00","AI: For Universal Ownership of Knowledge","Carte blanche: Esther Duflo",
+  {"Om passet":"AI bygger på kunskap som mänskligheten samlat gemensamt, men de mest kraftfulla modellerna ägs av en handfull företag. Vem ska äga och styra tekniken?","Carte blanche":"Esther Duflo","Talare":"Christy Hoffman, Isabelle Ferreras, Cecilia Rikap"}],
+ ["m2","main","14:00","15:30","Media: Freeing Public Debate from the Grip of Billionaires","Carte blanche: Paul Krugman",
+  {"Om passet":"Miljardärers ägande av stora medier kan styra vilka frågor och idéer som får uppmärksamhet. Vilka reformer kan ge en mångsidig offentlighet?","Carte blanche":"Paul Krugman","Talare":"Naomi Klein, Pierre Rosanvallon, Mónica Martínez-Bravo, Lea Ypi"}],
  ["m3","main","16:30","18:00","Tax: Fighting the Secession of the Ultra-Rich","Carte blanche: Joseph E. Stiglitz",
-  {"Fokus":"Hur progressiv beskattning kan återinföras i toppen av förmögenhetsskalan.","Carte blanche":"Joseph E. Stiglitz","Talare":"Gabriel Zucman, Jayati Ghosh, Dave Regan, Thomas Piketty"}],
+  {"Om passet":"Dagens skattesystem gynnar förmögenhet framför arbete. Hur kan progressiv beskattning återinföras i toppen av förmögenhetsskalan?","Carte blanche":"Joseph E. Stiglitz","Talare":"Gabriel Zucman, Jayati Ghosh, Dave Regan, Thomas Piketty"}],
 
- ["c1","cardin","11:45","12:20","Anti-Fascist Economics","Samtal med Isabella Weber",{"Format":"Rundabordssamtal","Medverkande":"Isabella Weber"}],
- ["c2","cardin","12:50","13:30","Fighting Oligarchy in the US","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
- ["c3","cardin","14:00","14:40","Philanthropy, Taxation and the Public Good","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
- ["c4","cardin","15:10","16:05","Why the Rich Should Pay More, by the Rich","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
- ["c5","cardin","16:35","17:15","Media: Reclaiming Information from Oligarchic Power","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
- ["c6","cardin","17:45","18:25","Breaking Secrecy: Investigative Journalism and Tax","Rundabordssamtal",{"Format":"Rundabordssamtal"}],
+ ["c1","cardin","11:45","12:20","Anti-Fascist Economics","Samtal med Isabella Weber",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati.","Medverkande":"Isabella Weber"}],
+ ["c2","cardin","12:50","13:30","Fighting Oligarchy in the US","Rundabordssamtal",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati. Medverkande har inte offentliggjorts."}],
+ ["c3","cardin","14:00","14:40","Philanthropy, Taxation and the Public Good","Rundabordssamtal",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati. Medverkande har inte offentliggjorts."}],
+ ["c4","cardin","15:10","16:05","Why the Rich Should Pay More, by the Rich","Rundabordssamtal",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati. Medverkande har inte offentliggjorts."}],
+ ["c5","cardin","16:35","17:15","Media: Reclaiming Information from Oligarchic Power","Rundabordssamtal",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati. Medverkande har inte offentliggjorts."}],
+ ["c6","cardin","17:45","18:25","Breaking Secrecy: Investigative Journalism and Tax","Rundabordssamtal",{"Format":"Rundabordssamtal","Om":"Aktivister, journalister, ekonomer och politiker i öppna samtal om makt, ojämlikhet och demokrati. Medverkande har inte offentliggjorts."}],
 
- ["f1","cine","11:45","13:05","<em>Tax Wars</em>","Debatt med Eva Joly",{"Format":"Visning + debatt (franska)","Debatt":"Eva Joly","Moderator":"Sébastien Laffitte"}],
- ["f2","cine","13:35","14:45","<em>Data Center Drought</em>","Debatt med Camille Étienne & Lou Welgryn",{"Format":"Visning + debatt (franska)","Debatt":"Camille Étienne, Lou Welgryn","Moderator":"Alexandre Poidatz"}],
- ["f3","cine","15:15","16:35","<em>Tax Me (If You Can!)</em>","Debatt med Thomas Lafarge & Guillaume Rambourg",{"Format":"Visning + debatt (franska)","Debatt":"Thomas Lafarge, Guillaume Rambourg","Moderator":"Rémi Lei"}],
+ ["f1","cine","11:45","13:05","<em>Tax Wars</em>","Debatt med Eva Joly",{"Format":"Visning + debatt (franska)","Debatt":"Eva Joly","Moderator":"Sébastien Laffitte","Filmen":"<a href=\"https://www.arte.tv/fr/videos/106711-000-A/tax-wars/\" target=\"_blank\" rel=\"noopener\">Se på arte.tv ↗</a>"}],
+ ["f2","cine","13:35","14:45","<em>Data Center Drought</em>","Debatt med Camille Étienne & Lou Welgryn",{"Format":"Visning + debatt (franska)","Debatt":"Camille Étienne, Lou Welgryn","Moderator":"Alexandre Poidatz","Filmen":"<a href=\"https://www.arte.tv/fr/videos/128630-000-A/chili-asseche-par-les-data-centers/\" target=\"_blank\" rel=\"noopener\">Se på arte.tv ↗</a>"}],
+ ["f3","cine","15:15","16:35","<em>Tax Me (If You Can!)</em>","Debatt med Thomas Lafarge & Guillaume Rambourg",{"Format":"Visning + debatt (franska)","Debatt":"Thomas Lafarge, Guillaume Rambourg","Moderator":"Rémi Lei","Filmen":"<a href=\"https://www.arte.tv/de/videos/RC-027810/tax-me-if-you-can/\" target=\"_blank\" rel=\"noopener\">Se på arte.tv ↗</a>"}],
  ["f4","cine","17:05","18:05","Tech Oligarchs at the Polls: Lessons from Brazil","Samtal med Patricia Campos Mello",{"Format":"Fireside chat (franska)","Medverkande":"Patricia Campos Mello","Moderator":"Giancarlo Summa"}],
 
  ["b1","hall","11:30","12:30","<em>Against International Oligarchy, the Paris Manifesto</em>","Gabriel Zucman",{"Författare":"Gabriel Zucman"}],
@@ -155,6 +180,15 @@ const RAW = [
 const toMin = t => {const [h,m]=t.split(":").map(Number);return h*60+m};
 const ITEMS = RAW.map(([id,stage,start,end,title,sub,details])=>({id,stage,start,end,s:toMin(start),e:toMin(end),title,sub,details}))
   .sort((a,b)=>a.s-b.s||a.e-b.e);
+
+// --- speakers index (derived from details) ---
+const ROLE_KEYS={"Carte blanche":"Carte blanche","Talare":"Talare","Medverkande":"Medverkande","Debatt":"Debatt","Moderator":"Moderator","Författare":"Signerar"};
+const SPEAKERS={};
+for(const it of ITEMS) for(const [k,v] of Object.entries(it.details)) if(ROLE_KEYS[k])
+  v.split(/,\s*/).forEach(n=>{(SPEAKERS[n]??=[]).push({it,role:ROLE_KEYS[k]})});
+const surname=n=>n.split(" ").filter(w=>!/^[A-Z]\.$/.test(w)).slice(-1)[0];
+const SPEAKER_NAMES=Object.keys(SPEAKERS).sort((a,b)=>surname(a).localeCompare(surname(b),"fr"));
+let q="";
 
 // --- state ---
 const store = {
@@ -190,7 +224,7 @@ const $ = s=>document.querySelector(s);
 function renderChips(){
   const opts = [["all","Allt",null],...Object.entries(STAGES).map(([k,v])=>[k,v.short,v.color])];
   $("#chips").innerHTML = opts.map(([k,l,c])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${c?`<i style="background:${c}"></i>`:""}${l}</button>`).join("");
-  $("#chips").style.display = view==="info" ? "none" : "flex";
+  $("#chips").style.display = (view==="info"||view==="speakers") ? "none" : "flex";
 }
 function card(it){
   const st = STAGES[it.stage], on = picks.has(it.id), s = status(it);
@@ -244,25 +278,70 @@ function render(){
       ? nowBox(list) + (nClash?`<p class="sub" style="margin:0 0 8px">⚠︎ ${nClash} punkter överlappar i tid – tryck på ett kort för detaljer.</p>`:"") + grouped(list)
         + `<div style="margin-top:16px"><button class="btn" id="ics">Lägg till i kalendern</button><button class="btn ghost" id="share">Dela mitt schema</button></div>`
       : `<div class="empty-state"><b>Inga valda programpunkter än</b>Tryck på ☆ vid en programpunkt för att lägga den i ditt schema.</div>`;
+  } else if (view==="speakers"){
+    main.innerHTML = speakersView();
+    const inp=$("#q"); if(inp){inp.value=q; if(document.activeElement!==inp && speakersView.focus){inp.focus();speakersView.focus=false}}
   } else {
     main.innerHTML = infoView();
   }
   document.documentElement.style.setProperty("--hdr", $("#hdr").offsetHeight+"px");
 }
+function speakersView(){
+  const norm=t=>t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  const names=SPEAKER_NAMES.filter(n=>!q||norm(n).includes(norm(q))||SPEAKERS[n].some(x=>norm(plain(x.it.title)).includes(norm(q))));
+  const sess=n=>SPEAKERS[n].sort((a,b)=>a.it.s-b.it.s).map(({it,role})=>{const on=picks.has(it.id),st=STAGES[it.stage];
+    return `<div class="srow" style="--c:${st.color}"><div><div class="time">${it.start}–${it.end}<span class="tag">${st.short}</span><span class="role">${role}</span></div><div class="stitle">${it.title}</div></div>
+    <button class="star" aria-pressed="${on}" aria-label="${on?"Ta bort från":"Lägg till i"} mitt schema" data-star="${it.id}">${on?"★":"☆"}</button></div>`}).join("");
+  return `<input id="q" class="search" type="search" placeholder="Sök talare eller ämne…" autocomplete="off">
+  <p class="sub" style="margin:4px 2px 12px">${SPEAKER_NAMES.length} namngivna medverkande. Tryck ☆ för att följa en programpunkt.</p>
+  ${names.map(n=>`<article class="person"><h3>${n}</h3>${sess(n)}</article>`).join("")||'<div class="empty-state"><b>Inga träffar</b>Prova ett annat namn.</div>'}
+  <p class="sub" style="margin-top:16px">Kvällseventets talare (Nobelpristagare, politiska ledare, ministrar och aktivister) och deltagarna i fem av Cardin-samtalen har inte offentliggjorts.</p>`;
+}
 function infoView(){
+  const L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener">${t}</a>`;
   return `<div class="info">
-    <h2>Om dagen</h2>
-    <p>Första Paris-toppmötet mot internationell oligarki. Lördag 21 november 2026, kl. 11:30–23:00 på Théâtre de la Concorde, Place de la Concorde, Paris.</p>
+    <h2>Om toppmötet</h2>
+    <p>Den extrema förmögenhetskoncentrationen – och den makt som följer med den – omformar vår värld. <b style="color:var(--ink)">First Paris Summit Against International Oligarchy</b> samlar forskare och beslutsfattare för att lägga grunden till en ny internationell plattform som ska bryta den utvecklingen.</p>
+    <p>#ParisAgainstOligarchy · #PSAIO</p>
+
+    <div class="card"><h3>När & var</h3>
+      <p><b style="color:var(--ink)">Lördag 21 november 2026, kl. 11:30–23:00</b><br>Théâtre de la Concorde<br>Place de la Concorde, Paris</p>
+      ${L("https://www.google.com/maps/search/?api=1&query=Th%C3%A9%C3%A2tre+de+la+Concorde+Paris",'<span class="btn ghost">Öppna i kartan</span>')}
+    </div>
+
+    <div class="card"><h3>Anmälan</h3>
+      <p>Anmälan sker via Théâtre de la Concordes evenemangssida. Kvällseventet i stora teatern är endast för inbjudna.</p>
+      ${L("https://www.theatredelaconcorde.paris/evenements/paris-contre-loligarchie-internationale/",'<span class="btn">Anmäl dig ↗</span>')}
+    </div>
+
+    <div class="card"><h3>Språk</h3><p>Webbplatsen finns på engelska och franska. Visningar och debatter i Ciné-Club hålls på franska.</p></div>
+
     <div class="card"><h3>Scener</h3><ul class="legend">${Object.values(STAGES).map(s=>`<li><i style="background:${s.color}"></i><span><b>${s.name}</b><br><span class="sub">${s.place}</span></span></li>`).join("")}</ul></div>
+
+    <div class="card"><h3>Arrangörer</h3><ul class="links">
+      <li>${L("https://www.taxobservatory.world","International Tax Observatory")}</li>
+      <li>${L("https://www.icrict.com","ICRICT")}</li>
+      <li>${L("https://www.theatredelaconcorde.paris","Théâtre de la Concorde")}</li>
+      <li>${L("https://stone-center-pse.eu","Stone Center")}</li>
+      <li>${L("https://www.paris.fr","Ville de Paris")}</li></ul>
+      <h3 style="margin-top:12px">Med stöd av</h3><ul class="links">
+      <li>${L("https://www.fes.de","Friedrich-Ebert-Stiftung")}</li>
+      <li>${L("https://www.norad.no","Norad")}</li>
+      <li>${L("https://globalneweconomy.org","Global Fund for a New Economy")}</li></ul>
+    </div>
+
+    <div class="card"><h3>Kontakt & följ</h3><ul class="links">
+      <li>${L("mailto:communication@taxobservatory.eu","communication@taxobservatory.eu")}</li>
+      <li>${L("https://x.com/taxobservatory","X")} · ${L("https://bsky.app/profile/taxobservatory.bsky.social","Bluesky")} · ${L("https://www.linkedin.com/company/tax-observatory","LinkedIn")} · ${L("https://www.instagram.com/taxobservatory","Instagram")} · ${L("https://www.youtube.com/@taxobservatory","YouTube")}</li></ul>
+    </div>
+
     <div class="card"><h3>Så funkar appen</h3>
-      <p>Tryck på ☆ för att följa en programpunkt – den hamnar under <b>Mitt schema</b> och sparas på din telefon. Tryck på ett kort för att se talare och detaljer. Under dagen markeras det som pågår, och appen varnar om dina val krockar.</p>
-      <p>Lägg till appen på hemskärmen via webbläsarens dela-meny för snabb åtkomst.</p></div>
-    <div class="card"><h3>Bra att veta</h3><p>Visningar och debatter i Ciné-Club hålls på franska. Kvällseventet i stora teatern är endast för inbjudna.</p>
-      <p>Källa: <a href="https://parisagainstoligarchy.world/program" target="_blank" rel="noopener">parisagainstoligarchy.world/program</a>. Kontrollera ändringar på den officiella sidan.</p></div>
+      <p>Tryck på ☆ för att följa en programpunkt – den hamnar under <b>Mitt schema</b> och sparas på din telefon. Under <b>Talare</b> hittar du varje persons medverkan. Under dagen markeras det som pågår, och appen varnar om dina val krockar. Lägg appen på hemskärmen via webbläsarens dela-meny.</p></div>
+
+    <p class="sub">Källa: ${L("https://parisagainstoligarchy.world/","parisagainstoligarchy.world")}. Inofficiell app – kontrollera ändringar på den officiella sidan.</p>
     ${picks.size?`<button class="btn ghost" id="clear">Rensa mitt schema</button>`:""}
   </div>`;
 }
-
 // --- calendar export ---
 function ics(list){
   const pad=n=>String(n).padStart(2,"0");
@@ -305,6 +384,7 @@ document.addEventListener("click",e=>{
   if(e.target.id==="share") share();
   if(e.target.id==="clear" && confirm("Rensa alla valda programpunkter?")){picks.clear();store.set("pso-picks",[]);render()}
 });
+document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;const pos=e.target.selectionStart;render();const i=$("#q");i.focus();i.setSelectionRange(pos,pos)}});
 // import shared schedule
 (function(){
   const m=location.hash.match(/s=([\w,]+)/);
@@ -312,7 +392,7 @@ document.addEventListener("click",e=>{
 })();
 function tick(){ $("#clk").textContent = parisNow().hm }
 tick(); render();
-setInterval(()=>{tick(); if(view!=="info") render()},30000);
+setInterval(()=>{tick(); if(view==="program"||view==="mine") render()},30000);
 addEventListener("resize",()=>document.documentElement.style.setProperty("--hdr",$("#hdr").offsetHeight+"px"));
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
